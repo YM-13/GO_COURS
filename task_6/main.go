@@ -19,7 +19,6 @@ func main() {
 	}
 
 	res := (int64(t_F) - n_32) * n_5 / n_9
-	fmt.Println(res)
 
 	fmt.Println("Temperature in degrees Celsius: ", res)
 }

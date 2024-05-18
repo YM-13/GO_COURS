@@ -6,23 +6,54 @@ import (
 )
 
 // ПОПАСТЬСЯ ДОЛЖЕН ПРАВИЛЬНЫЙ СИМВОЛ
-
-
 func isValid(s string) bool {
 	var s_st string = "({["
 	var s_end string = "]})"
 
+	//ПЕРЕВОДИМ СТРОКУ В МАССИВ
 	ss := strings.Split(s, "")
-	fmt.Println(ss)
+
+	//ЕСЛИ ДЛИНА МАССИВА НЕ ЧЕТНАЯ: false
 	if len(s) % 2 != 0 {
-		fmt.Println("---")
-		return false
-	}else if strings.Contains(s_st, ss[0]) != true || strings.Contains(s_end, ss[len(s) - 1]) != true {
-		fmt.Println("---")
 		return false
 	}
-	fmt.Println("+++")
-	return true
+
+	var para = map[string]int {"()": 0, "{}": 0, "[]": 0,}
+
+	for _, v := range ss{
+		if v == "(" {
+			para["()"] = para["()"] + 1
+		}else if v == "{" {
+			para["{}"] = para["{}"] + 1
+		}else if v == "[" {
+			para["[]"] = para["[]"] + 1
+		}
+
+		if v == ")" {
+			if para["()"] == 0 { // или меньше 1 ???
+				return false
+			}else {
+				para["()"] = para["()"] + 1
+			}
+		}else if v == "}" {
+			if para["{}"] == 0 {
+				return false
+			}else {
+				para["{}"] = para["{}"] + 1
+			}
+		}else if v == "]" {
+			if para["[]"] == 0 {
+				return false
+			}else {
+				para["[]"] = para["[]"] + 1
+			}
+		}
+	}
+	if para["()"] == 0 && para["{}"] == 0 && para["[]"] == 0 {
+		return true
+	}else {
+		return false
+	}
 }
 
 func main() {

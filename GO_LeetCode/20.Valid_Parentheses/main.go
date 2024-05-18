@@ -7,8 +7,8 @@ import (
 
 // ПОПАСТЬСЯ ДОЛЖЕН ПРАВИЛЬНЫЙ СИМВОЛ
 func isValid(s string) bool {
-	var s_st string = "({["
-	var s_end string = "]})"
+	// var s_st string = "({["
+	// var s_end string = "]})"
 
 	//ПЕРЕВОДИМ СТРОКУ В МАССИВ
 	ss := strings.Split(s, "")
@@ -21,6 +21,7 @@ func isValid(s string) bool {
 	var para = map[string]int {"()": 0, "{}": 0, "[]": 0,}
 
 	for _, v := range ss{
+		fmt.Print(v)
 		if v == "(" {
 			para["()"] = para["()"] + 1
 		}else if v == "{" {
@@ -28,24 +29,25 @@ func isValid(s string) bool {
 		}else if v == "[" {
 			para["[]"] = para["[]"] + 1
 		}
+		fmt.Println(para)
 
 		if v == ")" {
 			if para["()"] == 0 { // или меньше 1 ???
 				return false
 			}else {
-				para["()"] = para["()"] + 1
+				para["()"] = para["()"] - 1
 			}
 		}else if v == "}" {
 			if para["{}"] == 0 {
 				return false
 			}else {
-				para["{}"] = para["{}"] + 1
+				para["{}"] = para["{}"] - 1
 			}
 		}else if v == "]" {
 			if para["[]"] == 0 {
 				return false
 			}else {
-				para["[]"] = para["[]"] + 1
+				para["[]"] = para["[]"] - 1
 			}
 		}
 	}
@@ -57,5 +59,6 @@ func isValid(s string) bool {
 }
 
 func main() {
-	isValid("[({{}[]()}}[]]{}")
+	// fmt.Println(isValid("[({{}[]()}}[]]{}"))
+	fmt.Println(isValid("([)]"))
 }

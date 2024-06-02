@@ -1,62 +1,6 @@
-// package main
-
-// import (
-// 	"fmt"
-// 	"strings"
-// )
-
-// // ПОПАСТЬСЯ ДОЛЖЕН ПРАВИЛЬНЫЙ СИМВОЛ
-// func isValid(s string) bool {
-// 	// var s_st string = "({["
-// 	// var s_end string = "]})"
-
-// 	//ПЕРЕВОДИМ СТРОКУ В МАССИВ
-// 	ss := strings.Split(s, "")
 
 // 	//ЕСЛИ ДЛИНА МАССИВА НЕ ЧЕТНАЯ: false
-// 	if len(s) % 2 != 0 {
-// 		return false
-// 	}
 
-// 	var para = map[string]int {"()": 0, "{}": 0, "[]": 0,}
-
-// 	for _, v := range ss{
-// 		fmt.Print(v)
-// 		if v == "(" {
-// 			para["()"] = para["()"] + 1
-// 		}else if v == "{" {
-// 			para["{}"] = para["{}"] + 1
-// 		}else if v == "[" {
-// 			para["[]"] = para["[]"] + 1
-// 		}
-// 		fmt.Println(para)
-
-// 		if v == ")" {
-// 			if para["()"] == 0 { // или меньше 1 ???
-// 				return false
-// 			}else {
-// 				para["()"] = para["()"] - 1
-// 			}
-// 		}else if v == "}" {
-// 			if para["{}"] == 0 {
-// 				return false
-// 			}else {
-// 				para["{}"] = para["{}"] - 1
-// 			}
-// 		}else if v == "]" {
-// 			if para["[]"] == 0 {
-// 				return false
-// 			}else {
-// 				para["[]"] = para["[]"] - 1
-// 			}
-// 		}
-// 	}
-// 	if para["()"] == 0 && para["{}"] == 0 && para["[]"] == 0 {
-// 		return true
-// 	}else {
-// 		return false
-// 	}
-// }
 
 // func main() {
 // 	fmt.Println(isValid("[({{}[]()}}[]]{}"))
@@ -66,47 +10,57 @@
 package main
 import (
 	"fmt"
-	"strings"
 )
 
 func isValid(s string) bool {
-	var s_st string = "({["
-
-	//ПЕРЕВОДИМ СТРОКУ В МАССИВ
-	ss := strings.Split(s, "")
-	//ЕСЛИ ДЛИНА МАССИВА НЕ ЧЕТНАЯ: false
-	if len(ss) % 2 != 0 {
+    if len(s) % 2 != 0 {
 		return false
-	}
+    }
+	rs := []rune(s)
+	var m_v = map[rune]rune {40: 41, 123: 125, 91: 93,}
+	flag := 0
+	count := 0
 
-	for i, v := range ss[:len(ss)-1] {
-		if v == "!"{
+	for i, r := range(rs) {
+        flag = 0
+		if r == 0 {
 			continue
-		}else if strings.Contains(s_st, v) != true {
+		}else if _, ok := m_v[r]; ok == false {
 			return false
 		}
 
-		var para = map[string]string {"(": ")", "{": "}", "[": "]",}
-		clo_par := para[v]
-		ss[i] = "!"
 
-		fmt.Println("mm", ss)
-
-		for ii := (i + 1); ii < len(ss); ii += 2 {
-			if ss[ii] == clo_par {
-				ss[ii] = "!"
-				fmt.Println(ss[ii])
-				break
-			}else {
+		for ii := i + 1; ii < len(rs); ii += 2 {
+			if rs[ii] == r {
+				count += 1
+			}else if rs[ii] == 0 {
 				return false
+			}else if rs[ii] == m_v[r] {
+				if count == 0 {
+					fmt.Println(count)
+					rs[ii] = 0
+                	flag = 1
+					break
+				} else {
+					fmt.Println("tut0000")
+					count -= 1
+					flag = 1
+				}
 			}
 		}
+		//fmt.Println(count)
+		fmt.Println(rs)
+
 	}
+	if flag == 0 {
+		fmt.Println("tut")
+        return false
+    }
 	return true
 }
 
-
 func main() {
-	//fmt.Println(isValid("[({{}[]()}}[]]{}"))
-	fmt.Println(isValid("()[][]"))
+	// fmt.Println(isValid("(}]]{}"))
+	// fmt.Println(isValid("[{}]"))
+	fmt.Println(isValid("(([]){})")) // true
 }

@@ -1,21 +1,21 @@
 package main
 import (
 	"fmt"
-	f "GO_Triangle_Circle_Square/figures"
+	f "main/figures"
 )
 
 func main() {
 	cf := f.Figures{R: 3.0}
-	fmt.Println(cf.Circumiference)
+	fmt.Println(cf.Circumiference())
 
 	ca := f.Figures{R: 3.0}
-	fmt.Println(ca.AreaOfCircle)
+	fmt.Println(ca.AreaOfCircle())
 
 	sp := f.Figures{A: 6.0}
-	fmt.Appendln(sp.PSquare)
+	fmt.Println(sp.PSquare())
 
 	ss := f.Figures{A: 7.0}
-	fmt.Println(ss.SSquare)
+	fmt.Println(ss.SSquare())
 
 
 
@@ -24,4 +24,17 @@ func main() {
 
 	st := f.Figures{A: 11.0, B: 4.0}
 	fmt.Println(st.STriangle)
+}
+
+
+type Person struct {
+	Name string
+  }
+
+  func foo() {
+	John := Person{ Name: "John" }
+  }
+  //new
+  func NewSquare(a, b Point) Square {
+	return Square{a: a, b: b}
 }

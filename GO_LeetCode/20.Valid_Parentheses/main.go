@@ -12,50 +12,40 @@ import (
 	"fmt"
 )
 
-func isValid(s string) bool {
-    if len(s) % 2 != 0 || len(s) < 2 {
-		return false
-    }
+func pair(p rune) rune {
+	if p == '(' {
+		return ')'
+	} else if p == '[' {
+		return ']'
+	} else if p == '{' {
+		return '}'
+	}
+	return ' '
+}
 
-	rs := []rune(s)
-	var m_v = map[rune]rune {40: 41, 123: 125, 91: 93,}
-	//var prev int
-	count := 0
+func check(s string) bool {
+	stack := []rune{} // обычный слайс
 
-	for i := 0; i < len(rs) - 1; i++ {
-		if rs[i] == 0 {
-			continue
-		}
-		//prev = i
-		for ii := i + 1; ii < len(rs); ii += 2 {
-			if rs[ii] == 0 {
-				continue
-			}else if m_v[rs[i]] == rs[ii] {// rs[i] - key from map
-				// ПРОВЕРИТЬ ПРОХОДОМ В ОБРАТНОМ ПОРЯДКЕ НЕТ ЛИ ОТКРІВАЮЩЕЙ СКОБКИ
-				// ЕСЛИ ЕСТЬ, ТО "0" ПРИСВОИТЬ ЕЙ
-				for b := ii - 1; -1 < b; b -= 2 {
-					if rs[b] == rs[i] {
-						rs[b] = 0
-						rs[ii] = 0
-						count += 2
-						break
-					}
+	for _, r := range s {
+		if r == '(' || r == '[' || r == '{' {
+			stack = append(stack, r)
+		} else if r == ')' || r == '}' || r == ']' {
+			if len(stack) == 0 {
+				return false
+			} else {
+				if stack[len(stack)-1] != pair(r) {
+					return false
 				}
+				stack = stack[0 : len(stack)-1] // выкинули последний элем.
 			}
 		}
 	}
-	fmt.Println(rs)
-	if count == len(rs) {
-		return true
-	}else {
-		return false
-	}
 
-
+	return len(stack) == 0
 }
 
 func main() {
 	// fmt.Println(isValid("(}]]{}"))
 	// fmt.Println(isValid("[{}]"))
-	fmt.Println(isValid("[({])}")) // false
+	fmt.Println(check("[({])}")) // false
 }

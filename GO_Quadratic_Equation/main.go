@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
+	"math"
 )
 
 // x*x - 2x + 4 = 0
@@ -12,25 +12,10 @@ type Equation struct {
 	A, B, C float64
 }
 
-
-func main() {
-	eq := Equation{A: 1, B: -2, C: 4}
-
-	solve(eq, FunnySolver{})
-	//solve(eq, NormalSolver{})
-}
-
 type Solver interface {
 	Valid(Equation) bool
 	Solve(Equation) []float64
 }
-
-// ! true == false
-// ! false == true
-
-// (1 != 2) == true
-// (2 != 2) == false
-
 
 func solve(eq Equation, s Solver) {
 	if ! s.Valid(eq) {
@@ -50,14 +35,32 @@ func solve(eq Equation, s Solver) {
 type FunnySolver struct {}
 
 func (s FunnySolver) Valid(eq Equation) bool {
-	// просто случайное число от 0 до 99
-	return rand.Intn(100) > 50
+	return eq.A != 0
 }
 
 func (s FunnySolver) Solve(eq Equation) []float64 {
-	return []float64 {
-		0.0,
-		rand.Float64(),
+	d := math.Pow(eq.B, 2) - 4 * eq.A * eq.C
+	next := math.Sqrt(d)
+	res := []float64 {}
+	for i := 1; i < 3; i++ {
+		x := (-eq.B + next) / 2 * eq.A
+		res = append(res, x)
+		if d == 0.0 {
+			return res
+		}
+		next *= -1
+
 	}
+
+	return res
 }
 
+func main() {
+	eq := Equation{A: 1, B: -2, C: -3}
+
+	solve(eq, FunnySolver{})
+	//solve(eq, NormalSolver{})
+}
+
+// ! true == false // (1 != 2) == true
+// ! false == true // (2 != 2) == false

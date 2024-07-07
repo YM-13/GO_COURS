@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"math"
 )
 
@@ -18,7 +19,7 @@ type Solver interface {
 }
 
 func solve(eq Equation, s Solver) {
-	if ! s.Valid(eq) {
+	if !s.Valid(eq) {
 		fmt.Println("bad equation")
 		return
 	}
@@ -31,36 +32,57 @@ func solve(eq Equation, s Solver) {
 	}
 }
 
-// ------ solvers ----------
-type FunnySolver struct {}
+type NormalSolver struct {}
 
-func (s FunnySolver) Valid(eq Equation) bool {
+func (s NormalSolver) Valid(eq Equation) bool {
 	return eq.A != 0
 }
 
-func (s FunnySolver) Solve(eq Equation) []float64 {
-	d := math.Pow(eq.B, 2) - 4 * eq.A * eq.C
-	next := math.Sqrt(d)
-	res := []float64 {}
-	for i := 1; i < 3; i++ {
-		x := (-eq.B + next) / 2 * eq.A
-		res = append(res, x)
-		if d == 0.0 {
-			return res
-		}
-		next *= -1
+func (s NormalSolver) Solve(eq Equation) []float64 {
+	d := math.Pow(eq.B, 2) - 4*eq.A*eq.C
 
+	if d < 0 {
+		return []float64{}
 	}
 
-	return res
+	x1 := (-eq.B + math.Sqrt(d)) / 2 * eq.A
+	x2 := (-eq.B - math.Sqrt(d)) / 2 * eq.A
+
+	if d == 0 {
+		return []float64{x1}
+	} else {
+		return []float64{x1, x2}
+	}
+}
+
+// ------ solvers ----------
+type FunnySolver struct{}
+
+func (s FunnySolver) Valid(eq Equation) bool {
+	return true
+}
+
+func (s FunnySolver) Solve(eq Equation) []float64 {
+	return []float64{
+		rand.Float64(),
+		rand.Float64(),
+	}
+
 }
 
 func main() {
 	eq := Equation{A: 1, B: -2, C: -3}
+	var solver Solver
 
-	solve(eq, FunnySolver{})
-	//solve(eq, NormalSolver{})
+	if rand.Intn(100) % 2 == 0 { // 50-50
+		solver = FunnySolver{}
+	} else {
+		solver = NormalSolver{}
+	}
+
+
+	solve(eq, solver)
 }
 
 // ! true == false // (1 != 2) == true
-// ! false == true // (2 != 2) == false
+// ! false == true // (2 != 2) == fals

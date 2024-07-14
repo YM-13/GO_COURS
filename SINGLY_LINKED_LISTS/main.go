@@ -41,7 +41,10 @@ func main() {
 	AppendToList(root, 30)
 	AppendToList(root, 40)
 
-	PrintList(root)
+	//PrintList(root)
+	fmt.Println(Exists(root, 40))
+	fmt.Println(Avg(root))
+	fmt.Println(Length(root))
 }
 
 
@@ -72,9 +75,41 @@ func AppendToList(root *Node, val int) {
 
 // существует ли элемент в списке?
 // Exists(root *Node, needle int) bool
+func Exists(root *Node, needle int) bool {
+	node := root
+	flag := false
 
+	for node != nil {
+		if node.Val == needle {
+			flag = true
+			break
+		}
+		node = node.Next
+	}
+	return flag
+}
 // среднее арифм. элементов
 // Avg(root *Node) float64
+func Avg(root *Node) float64 {
+	node := root
+	count := 0
+	sum := 0
 
+	for node != nil {
+		count += 1
+		sum += node.Val
+		node = node.Next
+	}
+	return float64(sum) / float64(count)
+}
 // найти длину списка
 // Length(root *Node) int
+func Length(root *Node) int {
+	node := root
+	count := 0
+	for node != nil {
+		count += 1
+		node = node.Next
+	}
+	return count
+}

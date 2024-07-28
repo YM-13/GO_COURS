@@ -10,95 +10,190 @@ import (
 
 type Node struct {
 	Val int
-	Next *Node // в Next передаем значение из Node
+	Next *Node
 }
 
 // 10 -> 20 -> 30
 
+
+// array
+// [1, 2, 3, 4, 5] - N elems
+// search = O(N)
+// access (a[i]) = O(1)
+// insert = O(N)
+// delete = O(N)
+
+// 1 2 3 4 5 6 7
+// read a[2]
+
+
+// list
+// 1 -> 2 -> 3 -> 4 -> 5
+// search = O(N)
+// insert = O(1)
+// access = O(N)
+// delete = O(1)
+
+
 func main() {
-	root := &Node{ Val: 10 } // здесь адрес составной (VAL и *NODE) структурной переменной в памяти
-	AppendToList(root, 20) // передаем адрес головы листа и значение нового узла
-	AppendToList(root, 30) // 1212[2323[====]6767[====]]
+	root := &Node{ Val: 10 }
+	AppendToList(root, 20)
+
+	AppendToList(root, 10)
+	AppendToList(root, 30)
+
+	AppendToList(root, 10)
+	AppendToList(root, 30)
+
 	AppendToList(root, 40)
+
 	//PrintList(root)
-	fmt.Println(Exists(root, 40))
-	fmt.Println(Avg(root))
-	fmt.Println(Length(root))
+	//delElemse(root)
+	PrintList(root)
+	fmt.Println(KthToLast(root, 2))
+	KthToLast(root, 2)
+
 }
 
+// task1
+// написать ф, которая удаляет из с. списка дубликаты
+// -> 10 20 30 40
+// 2 случая
+// 1). можно использовать дополнительную память для буфера
+// 2). нельзя использовать дополнительную память
+
+func delElemse(root *Node) {
+
+	for root != nil {
+		//var ip *int
+		ip := new(int)
+		fmt.Println(*ip)
+		*ip = 333
+		fmt.Println(ip)
+		fmt.Println(*ip)
+		// fmt.Println(root)
+		// fmt.Println(&root.Next)
+		// fmt.Println(root.Next)
+
+		// fmt.Println()
+		// fmt.Println(root.Val)
+		// fmt.Println(&root.Val)
+		// fmt.Println()
+
+		// fmt.Println()
+		// fmt.Println("stop")
+		v := root.Val
+		//fmt.Println(v)
+		//fr := &root
+		prev := &root.Next // УКАЗАТЕЛЬ (АДРЕС) НА СЛЕДУЮЩИЙ УЗЕЛ
+		fmt.Println(prev)
+		fmt.Println(*prev)
+		//fmt.Println(*prev)
+		for node := root.Next; node != nil; node = node.Next {
+			//fmt.Println(node.Next)
+			if node.Val == v {
+				prev = &node.Next
+				fmt.Println("007", *prev)
+			// }else {
+			// 	//fr = &node
+			// 	prev = &node
+			}
+		}
+		root = root.Next
+	}
+}
+
+// task2
+// реализуйте алг. для нахождения в односвязном списке k-го элемента с конца
+// 10->20->25->30->45
+// KthTolast(root, 1) = 45
+// KthTolast(root, 3) = 25
+
+func KthToLast(root *Node, k int) int {
+	node := root
+	count := 0
+	for node != nil {
+		count += 1
+		KthToLast(node, count)
+		node = node.Next
+	}
+	fmt.Println(count)
+	p_n := count - k + 1
+	fmt.Println(p_n)
+	
+	if p_n == k {
+		return node.Val
+	}
+
+	return 5
+}
 
 func PrintList(root *Node) {
 	for node := root; node != nil; node = node.Next {
 		fmt.Printf("%d ", node.Val)
-		fmt.Printf("%d ", node.Next)
-		fmt.Printf("\n")
 	}
 
 	fmt.Printf("\n")
 }
 
 func AppendToList(root *Node, val int) {
-	node := root // адрес головы 0xc000052020
+	node := root
 
-	// ищем последний элемент == циклу WHILE -> он будет выполняться пока будет удовлетворение условию
+	// ищем последний элемент
 	for node.Next != nil {
-		// fmt.Println(node.Next)
-		// fmt.Println(node.Val)
 		node = node.Next
-		// fmt.Println(node)
 	}
 
 	node.Next = &Node{
 		Val: val,
 		Next: nil,
 	}
-	//fmt.Println(node.Next)
 }
 
+// task
+// написать функции
 
-// HOME WORK
+// среднее арифм. элементов
+// Avg(root *Node) float64
+
+// найти длину списка
+// Length(root *Node) int
+
 // существует ли элемент в списке?
-func Exists(root *Node, needle int) bool {
-	node := root // СОДЕРЖАНИЕ ГОЛОВЫ: [ ЗНАЧЕНИЕ, АДРЕС СЛЕДУЮЩЕГО ОБЪЕКТА ]
-	// fmt.Println("Адрес первого объекта", &node)
-	// fmt.Println("Содержание первого объекта:", node)
-	// fmt.Println()
-	// fmt.Println("Адрес второго объекта", &node.Next)
-	// fmt.Println("Содержание второго объекта:", node.Next)
+// Exists(root *Node, needle int) bool
+//
+// t = O(n) (f(n) = n)
+// t1 = O(f(n))
+// <=> алгоритм при n элементах
+// всегда в самом худшем случае отработает быстрее, чем f(n)
+// если t = O(n), то в худшем случае время работы растет линейно
+// если t = O(n!), то это очень плохо(
 
-	flag := false
+// O(n) == O(n + 1) == O(n + C)
 
+func Exists(node *Node, needle int) bool {
 	for node != nil {
 		if node.Val == needle {
-			flag = true
-			break
+			return true
 		}
 		node = node.Next
 	}
-	return flag
+	return false
 }
 
-// среднее арифм. элементов
-func Avg(root *Node) float64 {
-	node := root
-	count := 0
-	sum := 0
-
-	for node != nil {
-		count += 1
-		sum += node.Val
-		node = node.Next
+func ExistsRec(node *Node, needle int) bool {
+	if node == nil {
+		return false
 	}
-	return float64(sum) / float64(count)
+	if node.Val == needle {
+		return true
+	}
+	return ExistsRec(node.Next, needle)
 }
 
-// найти длину списка
-func Length(root *Node) int {
-	node := root
-	count := 0
-	for node != nil {
-		count += 1
-		node = node.Next
+func LengthRec(node *Node) int {
+	if node == nil {
+		return 0
 	}
-	return count
+	return 1 + LengthRec(node.Next)
 }

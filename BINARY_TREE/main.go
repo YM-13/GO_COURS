@@ -4,238 +4,165 @@ import (
 	"fmt"
 )
 
-// Linked List
+func outer() {
+	var inner func(i int)
 
-// root -> node1 -> node2 -> node3 -> nil
+	inner = func(i int) { // recursive inner function
+		if i < 0 {
+			return
+		}
+		fmt.Println(i)
+		inner(i - 1)
+	}
+
+	inner(10)
+}
+
+func foo() (func() string, func(string)) {
+	defer fmt.Println("the end of foo()")
+
+	data := "hello from foo()!"
+
+	getter := func() string {
+		return data
+	}
+
+	setter := func(val string) {
+		data = val
+	}
+
+	return getter, setter
+}
+
+func main1() {
+	get, set := foo()
+	fmt.Println(get())
+	set("4242")
+	fmt.Println(get())
+}
 
 type Node struct {
-	Val  int
+	Val int
 	Next *Node
 }
 
-// 10 -> 20 -> 30
+func main2() {
+	root := &Node {
+		Val: 10,
+		Next: &Node {
+			Val: 20,
+			Next: &Node {
+				Val: 30,
+			},
+		},
+	}
 
-// array
-// [1, 2, 3, 4, 5] - N elems
-// search = O(N)
-// access (a[i]) = O(1)
-// insert = O(N)
-// delete = O(N)
+	_, nd := kth(root, 2)
+	fmt.Println(nd.Val)
+}
 
-// 1 2 3 4 5 6 7
-// read a[2]
+func kth(node *Node, k int) (int, *Node) {
+	var fromEnd, fromEndNext int
+	var nd *Node
 
-// list
-// 1 -> 2 -> 3 -> 4 -> 5
-// search = O(N)
-// insert = O(1)
-// access = O(N)
-// delete = O(1)
+	if node.Next == nil { // last element
+		fromEnd = 1
+	} else {
+		fromEndNext, nd = kth(node.Next, k)
+		fromEnd = 1 + fromEndNext
+	}
+
+	if fromEnd == k {
+		return fromEnd, node
+	}
+
+	return fromEnd, nd
+}
+
+func add(a, b int) int {
+	var c int
+	c = a + b
+	return c
+}
+
+// stackframe size ~ 32 bytes
+// a
+// b
+// c
+// return addr
+
+// kth from last
+// 1. make 2 pointers: i, j
+// 2. move second pointer k items forward
+// 3. while (j.Next != nil) { move i, j }
+// 4. profit!
+
+// 1 2 3 4 5 6 7 8 9 10
+// i     j
+//   i     j
+//     i     j
+
+type Nod struct {
+	Val int
+	Left *Nod
+	Right *Nod
+}
+
+//     1
+//    / \
+//   2   3
+//  / \
+// 4   5
+//    / \
+//   6   7
+
+// binary tree
+// 1 - root
+// c, d, f, g - leaves
+
+
 
 func main() {
-	root := &Node{Val: 10}
-	AppendToList(root, 20)
+	root := &Nod{
+		Val: 1,
+		Left: &Nod{
+			Val: 2,
+			Left: &Nod{
+				Val:4,
+			},
+			Right: &Nod{
+				Val: 5,
+				Left: &Nod{
+					Val: 6,
+				},
+				Right: &Nod{
+					Val: 7,
+				},
+			},
+		},
+		Right: &Nod{
+			Val: 3,
+		},
+	}
 
-	AppendToList(root, 10)
-	AppendToList(root, 30)
-
-	AppendToList(root, 10)
-	AppendToList(root, 30)
-
-	AppendToList(root, 40)
-	AppendToList(root, 10)
-	AppendToList(root, 10)
-	// AppendToList(root, 10)
-
-	PrintList(root)
-	fmt.Println(KthToLast(root, 5))
-	// delElemse(root)
-	// PrintList(root)
-
-	// PrintList(RemoveOne(root, 10))
-	//PrintList(RemoveAll(root, 10))
+	fmt.Println(treeSearch(root, 1))
+	fmt.Println(treeSearch(root, 5))
+	fmt.Println(treeSearch(root, 10))
 }
 
-// remove first occurence of val
-// remove(10 20 30 10, 10) -> 20 30 10
-func RemoveOne(root *Node, val int) *Node {
-	if root.Val == val {
-		return root.Next
-	}
-
-	node := root
-
-	var prev *Node
-
-	for {
-		if node == nil {
-			break
-		}
-
-		if node.Val == val {
-			prev.Next = node.Next
-			break
-		}
-
-		prev = node
-		node = node.Next
-	}
-
-	return root
-}
-
-// remove all occurences of val
-// remove(10 20 30 10, 10) -> 20 30
-func RemoveAll(root *Node, val int) *Node {
-	for root != nil && root.Val == val {
-		root = root.Next
-	}
-
-	var prev *Node
-
-	for node := root; node != nil; node = node.Next {
-		if val == node.Val {
-			prev.Next = node.Next
-		}
-		prev = node
-	}
-
-	return root
-}
-
-// 3 cases -
-// 10 10 10 x x x x y y y
-// x x x 10 10 10 y y y
-// x x x y y y 10 10 10
-
-
-// task1
-// написать ф, которая удаляет из с. списка дубликаты
-// -> 10 20 30 40
-// 2 случая
-// 1). можно использовать дополнительную память для буфера
-// 2). нельзя использовать дополнительную память
-
-// func delElemse(root *Node) {
-
-// 	for root != nil {
-// 		v := root.Val
-// 		fmt.Println(v)
-// 		prev := root
-// 		for node := root.Next; node != nil; node = node.Next {
-// 			//node2 := node.Next
-// 			if node.Val == v {
-// 				prev.Next = node.Next
-// 			}else {
-// 				root = root.Next
-// 			}
-// 			}
-
-// 		}
-// 	}
-// }
-
-// task2
-// реализуйте алг. для нахождения в односвязном списке k-го элемента с конца
-// 10->20->25->30->45
-// KthTolast(root, 1) = 45
-// KthTolast(root, 3) = 25
-
-func KthToLast(root *Node, k int) int {
-	count := 0
-	for node := root; node != nil; node = node.Next {
-		count += 1
-	}
-	sNum := count - k + 1
-	for i := 1; i < sNum; i++ {
-		root = root.Next
-	}
-	return root.Val
-}
-
-// РЕКУРСИЯ
-var count int = 0
-var i_c int = 0
-var res int
-
-func KthToLast2(root *Node, k int) int {
-
-	if root != nil {
-		count += 1
-		KthToLast2(root.Next, k)
-	} else {
-		i_c = count - k + 1
-		fmt.Println("ПОРЯДКОВЫЙ НОМЕР: ", i_c)
-		return 0
-	}
-
-	if count == i_c {
-		res = root.Val
-		count -= 1
-	} else {
-		count -= 1
-	}
-	return res
-}
-
-func AppendToList(root *Node, val int) {
-	node := root
-
-	// ищем последний элемент
-	for node.Next != nil {
-		node = node.Next
-	}
-
-	node.Next = &Node{
-		Val:  val,
-		Next: nil,
-	}
-}
-
-// task
-// написать функции
-
-// среднее арифм. элементов
-// Avg(root *Node) float64
-
-// найти длину списка
-// Length(root *Node) int
-
-// существует ли элемент в списке?
-// Exists(root *Node, needle int) bool
-//
-// t = O(n) (f(n) = n)
-// t1 = O(f(n))
-// <=> алгоритм при n элементах
-// всегда в самом худшем случае отработает быстрее, чем f(n)
-// если t = O(n), то в худшем случае время работы растет линейно
-// если t = O(n!), то это очень плохо(
-
-// O(n) == O(n + 1) == O(n + C)
-
-func Exists(node *Node, needle int) bool {
-	for node != nil {
-		if node.Val == needle {
-			return true
-		}
-		node = node.Next
-	}
-	return false
-}
-
-func ExistsRec(node *Node, needle int) bool {
-	if node == nil {
+func treeSearch(root *Nod, needle int) bool {
+	if root == nil {
 		return false
 	}
-	if node.Val == needle {
-		return true
-	}
-	return ExistsRec(node.Next, needle)
+
+	return (root.Val == needle) || treeSearch(root.Left, needle) ||
+		treeSearch(root.Right, needle)
 }
 
-func LengthRec(node *Node) int {
-	if node == nil {
-		return 0
-	}
-	return 1 + LengthRec(node.Next)
-}
+// 1. подумать и написать удобную функцию для создания б-дерева
+// 2. написать функцию суммы всех элементов дерева
+// 3. написать функцию, которая вернет число элементов в дереве
+// 4* написать функцию, которая напечатает б-дерево.
+//   a
+//  /  \
+// c    d

@@ -47,8 +47,8 @@ func main() {
 	AppendToList(root, 10)
 	// AppendToList(root, 10)
 
-	//PrintList(root)
-	fmt.Println(KthToLast2(root, 3))
+	PrintList(root)
+	fmt.Println(KthToLast(root, 5))
 	// delElemse(root)
 	// PrintList(root)
 
@@ -64,6 +64,7 @@ func RemoveOne(root *Node, val int) *Node {
 	}
 
 	node := root
+
 	var prev *Node
 
 	for {
@@ -108,6 +109,32 @@ func RemoveAll(root *Node, val int) *Node {
 // x x x y y y 10 10 10
 
 
+// task1
+// написать ф, которая удаляет из с. списка дубликаты
+// -> 10 20 30 40
+// 2 случая
+// 1). можно использовать дополнительную память для буфера
+// 2). нельзя использовать дополнительную память
+
+// func delElemse(root *Node) {
+
+// 	for root != nil {
+// 		v := root.Val
+// 		fmt.Println(v)
+// 		prev := root
+// 		for node := root.Next; node != nil; node = node.Next {
+// 			//node2 := node.Next
+// 			if node.Val == v {
+// 				prev.Next = node.Next
+// 			}else {
+// 				root = root.Next
+// 			}
+// 			}
+
+// 		}
+// 	}
+// }
+
 // task2
 // реализуйте алг. для нахождения в односвязном списке k-го элемента с конца
 // 10->20->25->30->45
@@ -125,6 +152,7 @@ func KthToLast(root *Node, k int) int {
 	}
 	return root.Val
 }
+
 // РЕКУРСИЯ
 var count int = 0
 var i_c int = 0
@@ -150,15 +178,6 @@ func KthToLast2(root *Node, k int) int {
 	return res
 }
 
-
-func PrintList(root *Node) {
-	for node := root; node != nil; node = node.Next {
-		fmt.Printf("%d ", node.Val)
-	}
-
-	fmt.Printf("\n")
-}
-
 func AppendToList(root *Node, val int) {
 	node := root
 
@@ -182,9 +201,6 @@ func AppendToList(root *Node, val int) {
 // найти длину списка
 // Length(root *Node) int
 
-
-
-
 // существует ли элемент в списке?
 // Exists(root *Node, needle int) bool
 //
@@ -207,7 +223,6 @@ func Exists(node *Node, needle int) bool {
 	return false
 }
 
-//РЕКУРСИЯ ДЛЯ РЕШЕНИЯ
 func ExistsRec(node *Node, needle int) bool {
 	if node == nil {
 		return false
@@ -224,28 +239,3 @@ func LengthRec(node *Node) int {
 	}
 	return 1 + LengthRec(node.Next)
 }
-
-// task1
-// написать ф, которая удаляет из с. списка дубликаты
-// -> 10 20 30 40
-// 2 случая
-// 1). можно использовать дополнительную память для буфера
-// 2). нельзя использовать дополнительную память
-
-// func delElemse(root *Node) {
-// 	for root != nil {
-// 		v := root.Val
-// 		fmt.Println(v)
-// 		prev := root
-// 		for node := root.Next; node != nil; node = node.Next {
-// 			//node2 := node.Next
-// 			if node.Val == v {
-// 				prev.Next = node.Next
-// 			}else {
-// 				root = root.Next
-// 			}
-// 			}
-
-// 		}
-// 	}
-// }

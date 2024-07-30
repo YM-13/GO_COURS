@@ -128,7 +128,6 @@ func KthToLast(root *Node, k int) int {
 // РЕКУРСИЯ
 var count int = 0
 var i_c int = 0
-//var countNew = 0
 var res int
 
 func KthToLast2(root *Node, k int) int {
@@ -142,13 +141,9 @@ func KthToLast2(root *Node, k int) int {
 		return 0
 	}
 
-	// fmt.Println("COUNT: ", count)
-	// fmt.Println(root.Val)
 	if count == i_c {
 		res = root.Val
-		//fmt.Println(res)
 		count -= 1
-		//return res
 	} else {
 		count -= 1
 	}

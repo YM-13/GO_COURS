@@ -48,3 +48,36 @@ func numberOfEvens(ch chan int) int {
 
 	return count
 }
+
+
+/* ПЕРВЫЙ УРОК ПО КАНАЛАМ
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func worker(done chan bool) {
+	for i := 0; i < 5; i++ {
+		fmt.Println("worker", i)
+		time.Sleep(200 * time.Millisecond)
+	}
+
+	done <- true // write
+	close(done)
+}
+
+func main() {
+	ch := make(chan bool)
+	go worker(ch) // run as goroutine
+
+	for j := 0; j < 5; j++ {
+		fmt.Println("main", j)
+	}
+
+	_  = <- ch // read
+	fmt.Println("done")
+}
+
+*/

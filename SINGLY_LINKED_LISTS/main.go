@@ -239,3 +239,11 @@ func LengthRec(node *Node) int {
 	}
 	return 1 + LengthRec(node.Next)
 }
+
+
+//РЕШЕНИЕ ЧЕРЕЗ СЛЕДУЮЩИЙ ЗА ГЛАВНЫМ Н-Й ЭЛЕМЕНТ
+// kth from last
+// 1. make 2 pointers: i, j
+// 2. move second pointer k items forward
+// 3. while (j.Next != nil) { move i, j }
+// 4. profit!
